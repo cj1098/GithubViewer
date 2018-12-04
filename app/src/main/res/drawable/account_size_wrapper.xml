@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:drawable="@drawable/account_circle"
+        android:width="@dimen/account_circle_height"
+        android:height="@dimen/account_circle_width"
+        />
+
+</layer-list >

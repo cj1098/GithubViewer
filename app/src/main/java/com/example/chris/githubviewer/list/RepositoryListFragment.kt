@@ -1,4 +1,4 @@
-package com.example.chris.githubviewer
+package com.example.chris.githubviewer.list
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -6,16 +6,19 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.GridLayoutManager
 import com.example.chris.githubviewer.viewmodel.RepositoryListViewModel
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.SearchView
 import android.widget.TextView
+import com.example.chris.githubviewer.R
 import com.example.chris.githubviewer.model.GithubRepository
+import com.example.chris.githubviewer.viewUtil.VerticalSpaceItemDecoration
 import java.lang.ClassCastException
 
-class ListFragment: Fragment() {
+class RepositoryListFragment: Fragment() {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: RepositoryListAdapter
@@ -34,7 +37,7 @@ class ListFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        listener.restoreToolbar()
+        listener.restoreSearch()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,11 +55,11 @@ class ListFragment: Fragment() {
         val v = inflater.inflate(R.layout.fragment_list, container, false)
         return v.apply { val recyclerView: RecyclerView = findViewById(R.id.github_recycler)
             emptyListResultsView = findViewById(R.id.empty_results_view)
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
             adapter = RepositoryListAdapter(context, listener)
             recyclerView.layoutManager = layoutManager
             recyclerView.adapter = adapter
-            val dividerItemDecoration = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
+            val dividerItemDecoration = VerticalSpaceItemDecoration(16)
             recyclerView.addItemDecoration(dividerItemDecoration)
         }
     }
@@ -103,14 +106,14 @@ class ListFragment: Fragment() {
     }
 
     interface OnRepositorySelected {
-        fun onRepositoryItemSelected(githubRepository: GithubRepository)
-        fun restoreToolbar()
+        fun onRepositoryItemSelected(githubRepository: GithubRepository, transitionName: String, sharedView: View)
+        fun restoreSearch()
     }
 
     companion object {
         @JvmField
-        val TAG: String = ListFragment::class.java.simpleName
+        val TAG: String = RepositoryListFragment::class.java.simpleName
 
-        fun newInstance(): ListFragment = ListFragment()
+        fun newInstance(): RepositoryListFragment = RepositoryListFragment()
     }
 }

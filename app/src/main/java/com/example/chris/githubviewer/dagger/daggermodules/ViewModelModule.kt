@@ -1,4 +1,4 @@
-package com.example.chris.githubviewer.daggermodules
+package com.example.chris.githubviewer.dagger.daggermodules
 
 import android.arch.lifecycle.ViewModelProvider
 import com.example.chris.githubviewer.viewmodel.RepositoryListViewModelFactory

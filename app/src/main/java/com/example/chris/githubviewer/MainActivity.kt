@@ -7,32 +7,24 @@ import com.example.chris.githubviewer.viewmodel.RepositoryListViewModel
 import com.example.chris.githubviewer.viewmodel.RepositoryListViewModelFactory
 import javax.inject.Inject
 import android.support.v7.widget.SearchView
-import android.app.SearchManager
-import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import android.support.v4.view.MenuItemCompat
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.example.chris.githubviewer.model.GithubRepository
 import kotlinx.android.synthetic.main.activity_main.*
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.opengl.ETC1.getHeight
-import android.view.animation.TranslateAnimation
-import android.view.animation.AlphaAnimation
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.opengl.ETC1.getWidth
 import android.view.ViewAnimationUtils
-import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.view.View
+import com.example.chris.githubviewer.detail.RepositoryDetailFragment
+import com.example.chris.githubviewer.list.RepositoryListFragment
 
 
-
-class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
+class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySelected {
 
     @Inject
     lateinit var repositoryListViewModelFactory: RepositoryListViewModelFactory
@@ -40,7 +32,7 @@ class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
     @Inject
     lateinit var repositoryListViewModel: RepositoryListViewModel
 
-    private lateinit var searchView: SearchView
+    private lateinit var searchItem: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,8 +54,8 @@ class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.search, menu)
 
-        val searchItem = menu.findItem(R.id.action_search)
-        searchView = searchItem.actionView as SearchView
+        searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(searchView: MenuItem?): Boolean {
                 animateSearchToolbar(1, true, true)
@@ -100,31 +92,52 @@ class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
     }
 
     private fun addFragments() {
-        addFragment(R.id.content, ListFragment.newInstance(), ListFragment.TAG)
+        addFragment(R.id.content, RepositoryListFragment.newInstance(), RepositoryListFragment.TAG)
     }
 
-    override fun restoreToolbar() {
-        supportActionBar?.show()
+    override fun restoreSearch() {
+        if (::searchItem.isInitialized && !searchItem.isVisible) {
+            searchItem.isVisible = true
+        }
     }
 
-    override fun onRepositoryItemSelected(githubRepository: GithubRepository) {
-//        searchView.isIconified = true
-//        searchView.onActionViewCollapsed()
-//        searchView.clearFocus()
-        supportActionBar?.hide()
-        replaceFragment(R.id.content, RepositoryDetailFragment.newInstance(githubRepository), RepositoryDetailFragment.TAG)
+    override fun onRepositoryItemSelected(githubRepository: GithubRepository, transitionName: String, sharedView: View) {
+        searchItem.isVisible = false
+        closeAndClearSearchView()
+        ViewCompat.getTransitionName(sharedView)?.let { replaceFragment(R.id.content,
+                RepositoryDetailFragment.newInstance(githubRepository, it), RepositoryDetailFragment.TAG, true, sharedView) }
+    }
+
+    // This is gross :'(
+    private fun closeAndClearSearchView() {
+        val searchView = (searchItem.actionView as SearchView)
+        searchView.clearFocus()
+        searchView.isIconified = true
+        searchItem.collapseActionView()
     }
 
     // extension functions
     fun AppCompatActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) {
-        supportFragmentManager.inTransaction({ add(frameId, fragment, tag) }, "")
+        supportFragmentManager.transaction({ add(frameId, fragment, tag) }, "")
     }
 
-    fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String) {
-        supportFragmentManager.inTransaction({ replace(frameId, fragment, tag) }, tag)
+    fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, isSharedElement: Boolean, sharedView: View) {
+        if (isSharedElement) {
+            supportFragmentManager.transactionWithSharedElements({replace(frameId, fragment, tag)}, tag, sharedView)
+        } else {
+            supportFragmentManager.transaction({ replace(frameId, fragment, tag) }, tag)
+        }
     }
 
-    inline fun FragmentManager.inTransaction(function: FragmentTransaction.() -> FragmentTransaction, tag: String) {
+    inline fun FragmentManager.transactionWithSharedElements(function: FragmentTransaction.() -> FragmentTransaction, tag: String, sharedView: View) {
+        if (!tag.isEmpty()) {
+            ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).addToBackStack(tag).commit() }
+        } else {
+            ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).commit() }
+        }
+    }
+
+    inline fun FragmentManager.transaction(function: FragmentTransaction.() -> FragmentTransaction, tag: String) {
         if (!tag.isEmpty()) {
             beginTransaction().function().addToBackStack(tag).commit()
         } else {
@@ -138,68 +151,38 @@ class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
         window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
 
         if (show) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val width = toolbar.width -
-                        (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) else 0) -
-                        resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon / 2
-                val createCircularReveal = ViewAnimationUtils.createCircularReveal(
-                    toolbar,
-                    width,
-                    toolbar.height / 2,
-                    0.0f,
-                    width.toFloat()
-                )
-                createCircularReveal.duration = 250
-                createCircularReveal.start()
-            } else {
-                val translateAnimation = TranslateAnimation(0.0f, 0.0f, -toolbar.height as Float, 0.0f)
-                translateAnimation.duration = 220
-                toolbar.clearAnimation()
-                toolbar.startAnimation(translateAnimation)
-            }
+            val width = toolbar.width -
+                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) else 0) -
+                    resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon / 2
+            val createCircularReveal = ViewAnimationUtils.createCircularReveal(
+                toolbar,
+                width,
+                toolbar.height / 2,
+                0.0f,
+                width.toFloat()
+            )
+            createCircularReveal.duration = 250
+            createCircularReveal.start()
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val width = toolbar.width -
-                        (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) else 0) -
-                        resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon / 2
-                val createCircularReveal = ViewAnimationUtils.createCircularReveal(
-                    toolbar,
-                    width,
-                    toolbar.height / 2,
-                    width.toFloat(),
-                    0.0f
-                )
-                createCircularReveal.duration = 250
-                createCircularReveal.addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        super.onAnimationEnd(animation)
-                        toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
-                        window.statusBarColor = (ContextCompat.getColor(this@MainActivity, R.color.colorPrimaryDark))
-                    }
-                })
-                createCircularReveal.start()
-            } else {
-                val alphaAnimation = AlphaAnimation(1.0f, 0.0f)
-                val translateAnimation = TranslateAnimation(0.0f, 0.0f, 0.0f, -toolbar.height as Float)
-                val animationSet = AnimationSet(true)
-                animationSet.addAnimation(alphaAnimation)
-                animationSet.addAnimation(translateAnimation)
-                animationSet.duration = 220
-                animationSet.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationStart(animation: Animation) {
-
-                    }
-
-                    override fun onAnimationEnd(animation: Animation) {
-                        toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
-                    }
-
-                    override fun onAnimationRepeat(animation: Animation) {
-
-                    }
-                })
-                toolbar.startAnimation(animationSet)
-            }
+            val width = toolbar.width -
+                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) else 0) -
+                    resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon / 2
+            val createCircularReveal = ViewAnimationUtils.createCircularReveal(
+                toolbar,
+                width,
+                toolbar.height / 2,
+                width.toFloat(),
+                0.0f
+            )
+            createCircularReveal.duration = 250
+            createCircularReveal.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+                    window.statusBarColor = (ContextCompat.getColor(this@MainActivity, R.color.colorPrimaryDark))
+                }
+            })
+            createCircularReveal.start()
             window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
         }
     }

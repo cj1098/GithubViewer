@@ -2,11 +2,12 @@ package com.example.chris.githubviewer
 
 import android.app.Activity
 import android.app.Application
-import com.example.chris.githubviewer.daggermodules.AppModule
+import com.example.chris.githubviewer.dagger.ApplicationComponent
+import com.example.chris.githubviewer.dagger.DaggerApplicationComponent
+import com.example.chris.githubviewer.dagger.daggermodules.AppModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
-import dagger.android.support.DaggerApplication
 import javax.inject.Inject
 
 class GithubViewerApplication: Application(), HasActivityInjector {

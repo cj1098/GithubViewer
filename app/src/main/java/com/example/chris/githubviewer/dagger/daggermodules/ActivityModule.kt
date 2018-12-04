@@ -1,4 +1,4 @@
-package com.example.chris.githubviewer.daggermodules
+package com.example.chris.githubviewer.dagger.daggermodules
 
 import com.example.chris.githubviewer.MainActivity
 import dagger.Module

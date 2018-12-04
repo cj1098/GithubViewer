@@ -2,4 +2,9 @@
 <resources>
     <dimen name="dropdownWidth">32dp</dimen>
     <dimen name="toolbar_padding">8dp</dimen>
+    <dimen name="detail_item_spacing_horizontal">8dp</dimen>
+    <dimen name="detail_item_spacing_vertical">24dp</dimen>
+    <dimen name="account_circle_height">48dp</dimen>
+    <dimen name="account_circle_width">48dp</dimen>
+    <dimen name="account_circle_padding_left">16dp</dimen>
 </resources>

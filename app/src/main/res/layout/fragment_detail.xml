@@ -1,11 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="madeit"/>
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_repository_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+
+            <TextView
+                android:id="@+id/user_repository_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+
+            <TextView
+                android:id="@+id/user_repository_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+
+            <TextView
+                android:id="@+id/user_repository_forks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+
+            <TextView
+                android:id="@+id/user_repository_open_issues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+
+            <TextView
+                android:id="@+id/user_repository_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:layout_marginLeft="@dimen/detail_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/detail_item_spacing_vertical"
+                android:drawableLeft="@drawable/account_size_wrapper"
+                android:drawablePadding="@dimen/account_circle_padding_left"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

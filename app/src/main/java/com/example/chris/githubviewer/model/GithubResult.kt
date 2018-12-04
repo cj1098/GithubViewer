@@ -4,12 +4,16 @@ import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import kotlinx.android.parcel.Parcelize
 
+// Have to have a default constructor for Jackson to be able to deserialize into these objects.
+// there's a library called jackson-module-kotlin that solves this issue.
+
 @Parcelize
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Owner(val login: String, val avatar_url: String): Parcelable {
     constructor() : this("", "")
 }
 
+// Poor naming because we're also using mvvm's nomenclature for service repositories
 @Parcelize
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GithubRepository(
@@ -19,7 +23,7 @@ data class GithubRepository(
         val size: Int,
         val forks_count: Int,
         val open_issues_count: Int,
-        val url: String): Parcelable {
+        val html_url: String): Parcelable {
     constructor() : this("", Owner(), "", 0, 0, 0, "")
 }
 

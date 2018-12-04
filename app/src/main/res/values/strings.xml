@@ -1,14 +1,18 @@
 <resources>
     <string name="app_name">GithubViewer</string>
-<<<<<<< HEAD
     <string name="search_hint">Search</string>
     <string name="search">Search</string>
     <string name="empty_results_string">Your search did not match any results. Try a different keyword or try again later</string>
     <string name="default_content_description">dummy string</string>
     <string name="user_image_content_description">User\'s profile image</string>
     <string name="no_implementation">Must implement %s</string>
-=======
-    <string name="empty_results_string">Your search did not match any results. Try a different keyword or try again later</string>
-    <string name="user_image_content_description">User\'s profile image</string>
->>>>>>> 3484551443ae15720793e2edf55a7e83064bcd78
+    <string name="repository_name">Repository Name: %s</string>
+    <string name="user_name">User Name: %s</string>
+    <string name="repository_name_detail">Repository Name \n%s</string>
+    <string name="user_name_detail">User Name \n%s</string>
+    <string name="repository_description_detail">Repository Description \n%s</string>
+    <string name="repository_size_detail">Repository Size in KB \n%d</string>
+    <string name="repository_forks_detail">Number of Forks \n%d</string>
+    <string name="repository_open_issues_detail">Number of Open Issues \n%d</string>
+    <string name="repository_link_detail">Repository Link \n%s</string>
 </resources>
