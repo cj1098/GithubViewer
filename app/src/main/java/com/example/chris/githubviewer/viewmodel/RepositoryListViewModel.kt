@@ -2,6 +2,7 @@ package com.example.chris.githubviewer.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.example.chris.githubviewer.model.GithubRepository
 import com.example.chris.githubviewer.model.GithubResult
 import com.example.chris.githubviewer.service.repository.ProjectRepository
 import io.reactivex.android.schedulers.AndroidSchedulers

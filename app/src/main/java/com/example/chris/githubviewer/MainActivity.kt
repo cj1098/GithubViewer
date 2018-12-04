@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
             override fun onQueryTextSubmit(query: String): Boolean {
 
                 repositoryListViewModel.loadGithubResults(query)
+
                 return false
             }
 
@@ -202,6 +203,4 @@ class MainActivity : AppCompatActivity(), ListFragment.OnRepositorySelected {
             window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
         }
     }
-
-
 }

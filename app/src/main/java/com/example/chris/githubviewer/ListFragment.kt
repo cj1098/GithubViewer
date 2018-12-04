@@ -32,13 +32,14 @@ class ListFragment: Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
         listener.restoreToolbar()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,6 +59,29 @@ class ListFragment: Fragment() {
             val dividerItemDecoration = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
             recyclerView.addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.search, menu)
+
+        val myActionMenuItem = menu?.findItem(R.id.action_search)
+        val searchView = myActionMenuItem?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // Toast like print
+                if (!searchView.isIconified) {
+                    searchView.isIconified = true
+                }
+                myActionMenuItem.collapseActionView()
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false
+            }
+        })
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun setupObservableViewModels() {
@@ -84,7 +108,8 @@ class ListFragment: Fragment() {
     }
 
     companion object {
-        @JvmField val TAG: String = ListFragment::class.java.simpleName
+        @JvmField
+        val TAG: String = ListFragment::class.java.simpleName
 
         fun newInstance(): ListFragment = ListFragment()
     }
