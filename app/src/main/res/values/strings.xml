@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GithubViewer</string>
+    <string name="search_hint">Search</string>
+    <string name="search">Search</string>
+    <string name="empty_results_string">Your search did not match any results. Try a different keyword or try again later</string>
+    <string name="default_content_description">dummy string</string>
+    <string name="user_image_content_description">User\'s profile image</string>
+    <string name="no_implementation">Must implement %s</string>
 </resources>
