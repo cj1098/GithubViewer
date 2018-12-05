@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import com.example.chris.githubviewer.viewmodel.RepositoryListViewModel
 import android.support.v7.widget.LinearLayoutManager
@@ -15,7 +14,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import com.example.chris.githubviewer.R
 import com.example.chris.githubviewer.model.GithubRepository
-import com.example.chris.githubviewer.viewUtil.VerticalSpaceItemDecoration
+import com.example.chris.githubviewer.view.VerticalSpaceItemDecoration
 import java.lang.ClassCastException
 
 class RepositoryListFragment: Fragment() {
@@ -40,11 +39,6 @@ class RepositoryListFragment: Fragment() {
         listener.restoreSearch()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { repositoryListViewModel = ViewModelProviders.of(it).get(RepositoryListViewModel::class.java) }
         setupObservableViewModels()
@@ -66,12 +60,10 @@ class RepositoryListFragment: Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.search, menu)
-
         val myActionMenuItem = menu?.findItem(R.id.action_search)
         val searchView = myActionMenuItem?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                // Toast like print
                 if (!searchView.isIconified) {
                     searchView.isIconified = true
                 }
@@ -80,7 +72,6 @@ class RepositoryListFragment: Fragment() {
             }
 
             override fun onQueryTextChange(s: String): Boolean {
-                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
                 return false
             }
         })
@@ -95,14 +86,14 @@ class RepositoryListFragment: Fragment() {
                 emptyListResultsView.visibility = View.GONE
             }
             adapter.setItems(it.items)
-        } })
+        }})
 
         // This will never happen unless we get some kind of exception from github because we hit
         // the limit on api calls during testing.
         repositoryListViewModel.githubError.observe(this, Observer { it?.let {
             emptyListResultsView.visibility = View.VISIBLE
             emptyListResultsView.text = it
-        } })
+        }})
     }
 
     interface OnRepositorySelected {

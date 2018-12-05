@@ -2,9 +2,12 @@
 <resources>
     <dimen name="dropdownWidth">32dp</dimen>
     <dimen name="toolbar_padding">8dp</dimen>
+    <dimen name="grid_user_image_height">200dp</dimen>
     <dimen name="detail_item_spacing_horizontal">8dp</dimen>
     <dimen name="detail_item_spacing_vertical">24dp</dimen>
     <dimen name="account_circle_height">48dp</dimen>
     <dimen name="account_circle_width">48dp</dimen>
     <dimen name="account_circle_padding_left">16dp</dimen>
+    <dimen name="action_button_overflow_material_width">36dp</dimen>
+    <dimen name="action_button_material_width">48dp</dimen>
 </resources>

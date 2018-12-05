@@ -40,9 +40,6 @@ class RepositoryDetailFragment: Fragment() {
             repositoryOpenIssues = findViewById(R.id.user_repository_open_issues)
             repositoryLink = findViewById(R.id.user_repository_link)
 
-            repositoryLink.setOnClickListener {
-
-            }
             if (arguments?.getString(TRANSITION_NAME) != null) {
                 userImage.transitionName = arguments?.getString(TRANSITION_NAME)
             }
@@ -67,9 +64,9 @@ class RepositoryDetailFragment: Fragment() {
         private const val TRANSITION_NAME = "TRANSITION_NAME"
 
         fun newInstance(githubRepository: GithubRepository, transitionName: String): RepositoryDetailFragment {
+            val fragment = RepositoryDetailFragment()
             val args = Bundle()
             args.putString(TRANSITION_NAME, transitionName)
-            val fragment = RepositoryDetailFragment()
             args.putParcelable(REPOSITORY, githubRepository)
             fragment.arguments = args
             return fragment

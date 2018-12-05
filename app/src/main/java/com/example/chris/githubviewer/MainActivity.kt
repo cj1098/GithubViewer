@@ -73,9 +73,7 @@ class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySel
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-
                 repositoryListViewModel.loadGithubResults(query)
-
                 return false
             }
 
@@ -129,6 +127,7 @@ class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySel
         }
     }
 
+    // Could make the sharedView into a map of sharedView's with the transitionNames as the keys.
     inline fun FragmentManager.transactionWithSharedElements(function: FragmentTransaction.() -> FragmentTransaction, tag: String, sharedView: View) {
         if (!tag.isEmpty()) {
             ViewCompat.getTransitionName(sharedView)?.let { beginTransaction().function().addSharedElement(sharedView, it).addToBackStack(tag).commit() }
@@ -147,13 +146,13 @@ class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySel
 
     fun animateSearchToolbar(numberOfMenuIcon: Int, containsOverflow: Boolean, show: Boolean) {
 
-        toolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
-        window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        window.statusBarColor = (ContextCompat.getColor(this, R.color.quantum_grey_600))
 
         if (show) {
             val width = toolbar.width -
-                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) else 0) -
-                    resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon / 2
+                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.action_button_overflow_material_width) else 0) -
+                    resources.getDimensionPixelSize(R.dimen.action_button_material_width) * numberOfMenuIcon / 2
             val createCircularReveal = ViewAnimationUtils.createCircularReveal(
                 toolbar,
                 width,
@@ -161,12 +160,12 @@ class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySel
                 0.0f,
                 width.toFloat()
             )
-            createCircularReveal.duration = 250
+            createCircularReveal.duration = CIRCULAR_REVEAL_ANIMATION_DURATION
             createCircularReveal.start()
         } else {
             val width = toolbar.width -
-                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material) else 0) -
-                    resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) * numberOfMenuIcon / 2
+                    (if (containsOverflow) resources.getDimensionPixelSize(R.dimen.action_button_overflow_material_width) else 0) -
+                    resources.getDimensionPixelSize(R.dimen.action_button_material_width) * numberOfMenuIcon / 2
             val createCircularReveal = ViewAnimationUtils.createCircularReveal(
                 toolbar,
                 width,
@@ -174,7 +173,7 @@ class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySel
                 width.toFloat(),
                 0.0f
             )
-            createCircularReveal.duration = 250
+            createCircularReveal.duration = CIRCULAR_REVEAL_ANIMATION_DURATION
             createCircularReveal.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
@@ -185,5 +184,9 @@ class MainActivity : AppCompatActivity(), RepositoryListFragment.OnRepositorySel
             createCircularReveal.start()
             window.statusBarColor = (ContextCompat.getColor(this, R.color.colorPrimaryDark))
         }
+    }
+
+    companion object {
+        const val CIRCULAR_REVEAL_ANIMATION_DURATION = 250L
     }
 }

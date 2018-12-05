@@ -1,4 +1,4 @@
-package com.example.chris.githubviewer.viewUtil
+package com.example.chris.githubviewer.view
 
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView

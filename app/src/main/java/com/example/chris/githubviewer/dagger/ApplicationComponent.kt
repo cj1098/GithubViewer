@@ -7,7 +7,6 @@ import com.example.chris.githubviewer.dagger.daggermodules.ActivityModule
 import com.example.chris.githubviewer.dagger.daggermodules.AppModule
 import com.example.chris.githubviewer.dagger.daggermodules.ContextModule
 import com.example.chris.githubviewer.dagger.daggermodules.ViewModelModule
-import com.example.chris.githubviewer.viewmodel.BaseViewModel
 import com.example.chris.githubviewer.viewmodel.RepositoryListViewModel
 import dagger.Component
 import javax.inject.Singleton
@@ -17,7 +16,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(repositoryListViewModel: RepositoryListViewModel)
-    fun inject(baseViewModel: BaseViewModel)
     fun inject(repositoryListFragment: RepositoryListFragment)
     fun inject(githubViewerApplication: GithubViewerApplication)
 }
